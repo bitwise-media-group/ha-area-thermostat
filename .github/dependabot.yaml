@@ -1,0 +1,59 @@
+# Copyright 2026 BitWise Media Group Ltd
+# SPDX-License-Identifier: MIT
+
+# Three ecosystems: github-actions keeps the SHA-pinned reusable-workflow
+# callers and validation actions in .github/workflows current, gitsubmodule
+# tracks the toolchain submodule at .mise/ (pinned dev CLIs and the task
+# archetypes) so a library release flows here as a bump, and uv keeps the
+# locked dev dependencies (pytest-homeassistant-custom-component tracks HA
+# releases closely, so this is also the HA-compatibility treadmill).
+version: 2
+updates:
+  # Keep the actions pinned in .github/workflows current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: deps
+      prefix-development: deps
+      include: scope
+    cooldown:
+      default-days: 7
+      # our own actions and reusable workflows ship straight through — no
+      # cooldown wait
+      exclude:
+        - bitwise-media-group/*
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Track the toolchain submodule's release branch.
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: deps
+      include: scope
+    cooldown:
+      default-days: 7
+      exclude:
+        - bitwise-media-group/*
+
+  # Keep uv.lock current (dev group only; the integration itself has no
+  # Python requirements — it runs on whatever the HA host ships).
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: deps
+      include: scope
+    cooldown:
+      default-days: 7
+    groups:
+      python-dev:
+        patterns:
+          - "*"

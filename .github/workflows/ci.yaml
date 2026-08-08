@@ -1,0 +1,32 @@
+# Copyright 2026 BitWise Media Group Ltd
+# SPDX-License-Identifier: MIT
+
+# Continuous integration — thin caller for the org's reusable ci workflow. It
+# discovers the canonical tasks this repo defines (`mise tasks ls --name-only`)
+# and runs `mise run <task>` for each: lint (ruff check + format --check plus
+# the toolchain's prose/shell/container/license passes) and test (pytest with
+# pytest-homeassistant-custom-component, coverage into coverage/). The
+# pyproject.toml at the root makes the reusable workflow set up uv, which
+# provisions the pinned Python toolchain and the locked dev dependencies.
+#
+# Pinned to a full commit SHA (tag in the comment); Dependabot keeps it fresh.
+
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: ["main", "releases/*"]
+
+# the reusable workflow's jobs only need contents:read; grant just that ceiling
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: bitwise-media-group/github-workflows/.github/workflows/ci.yaml@677e862cc088fe8f7b8948189467fe77e60e93a9 # v6.0.2
+    with:
+      # flip to true once the repo is registered on Codecov — the test task
+      # already emits coverage/cobertura-coverage.xml and coverage/junit.xml
+      coverage: false
