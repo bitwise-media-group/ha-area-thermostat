@@ -70,7 +70,7 @@
         },
         "data_description": {
           "act_delta": "In heat or cool mode, engage when the temperature is this far beyond the target. In heat/cool (auto) mode the low/high range itself is the dead band.",
-          "idle_delta": "Release a heating/cooling call once the temperature is back within this distance of the threshold.",
+          "idle_delta": "Release a heating/cooling call once the temperature is back within this distance of the threshold. In heat/cool (auto) mode this is capped at half the low/high gap, so a large value drives the temperature to the midpoint of the range.",
           "boost_delta": "Bring the air conditioning in as boost heat when the temperature is this far below the heat threshold; the boost then runs until the call releases.",
           "keep_alive": "Forced re-assert of modes, presets, and setpoints on every interval — undoes manual fiddling at the device.",
           "sensor_stale_timeout": "If the temperature sensor stays unavailable this long, all sources are idled for safety."
@@ -79,7 +79,6 @@
     },
     "error": {
       "idle_not_below_act": "The release hysteresis must be smaller than the act threshold.",
-      "idle_too_large": "The release hysteresis must be at most half the minimum low/high gap (1 °C).",
       "min_not_below_max": "The minimum setpoint must be at least 1 °C below the maximum."
     }
   },

@@ -154,9 +154,12 @@ async def test_options_flow_validation_and_save(hass: HomeAssistant) -> None:
         assert result["type"] is FlowResultType.FORM
         assert result["errors"] == {"base": "idle_not_below_act"}
 
-        good = {**DEFAULT_OPTIONS, CONF_ACT_DELTA: 2.0}
+        # A release hysteresis above 0.5 is fine now that the engine clamps
+        # it to half the low/high gap per evaluation.
+        good = {**DEFAULT_OPTIONS, CONF_ACT_DELTA: 2.5, CONF_IDLE_DELTA: 2.0}
         result = await hass.config_entries.options.async_configure(
             result["flow_id"], good
         )
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert entry.options[CONF_ACT_DELTA] == 2.0
+    assert entry.options[CONF_ACT_DELTA] == 2.5
+    assert entry.options[CONF_IDLE_DELTA] == 2.0

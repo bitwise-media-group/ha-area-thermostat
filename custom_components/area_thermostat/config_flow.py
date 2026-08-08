@@ -102,7 +102,7 @@ def _options_schema(options: dict[str, Any]) -> vol.Schema:
     fields: dict[Any, Any] = {}
     for args in (
         (CONF_ACT_DELTA, 0.1, 5.0, 0.1, "°C"),
-        (CONF_IDLE_DELTA, 0.1, 2.0, 0.1, "°C"),
+        (CONF_IDLE_DELTA, 0.1, 5.0, 0.1, "°C"),
         (CONF_BOOST_DELTA, 0.5, 10.0, 0.1, "°C"),
         (CONF_MIN_TEMP, 5.0, 25.0, 0.5, "°C"),
         (CONF_MAX_TEMP, 15.0, 35.0, 0.5, "°C"),
@@ -242,8 +242,6 @@ class AreaThermostatOptionsFlow(OptionsFlow):
         if user_input is not None:
             if user_input[CONF_IDLE_DELTA] >= user_input[CONF_ACT_DELTA]:
                 errors["base"] = "idle_not_below_act"
-            elif user_input[CONF_IDLE_DELTA] * 2 > MIN_RANGE_GAP:
-                errors["base"] = "idle_too_large"
             elif user_input[CONF_MIN_TEMP] >= user_input[CONF_MAX_TEMP] - MIN_RANGE_GAP:
                 errors["base"] = "min_not_below_max"
             else:

@@ -11,6 +11,7 @@ from custom_components.area_thermostat.engine import (
     Action,
     ClimateEngine,
     Direction,
+    EngineConfig,
     EngineInputs,
     Mode,
     Role,
@@ -128,6 +129,24 @@ class TestHeatCoolRange:
         assert decision.action is Action.COOLING
         assert decision.heat_call is False
 
+    def test_large_idle_delta_releases_at_the_midpoint(self) -> None:
+        # idle_delta 5 with a 4° range (19-23) clamps to 2: both releases
+        # land exactly on the midpoint (21) and never cross.
+        engine = ClimateEngine(EngineConfig(act_delta=6.0, idle_delta=5.0))
+        assert engine.evaluate(make_inputs(23.5)).action is Action.COOLING
+        assert engine.evaluate(make_inputs(21.1)).action is Action.COOLING
+        assert engine.evaluate(make_inputs(21.0)).action is Action.IDLE
+        assert engine.evaluate(make_inputs(18.5)).action is Action.HEATING
+        assert engine.evaluate(make_inputs(20.9)).action is Action.HEATING
+        assert engine.evaluate(make_inputs(21.0)).action is Action.IDLE
+
+    def test_moderate_idle_delta_is_not_clamped(self) -> None:
+        engine = ClimateEngine(EngineConfig(act_delta=2.5, idle_delta=1.5))
+        assert engine.evaluate(make_inputs(23.5)).action is Action.COOLING
+        # Release at high - 1.5 = 21.5, above the midpoint.
+        assert engine.evaluate(make_inputs(21.6)).action is Action.COOLING
+        assert engine.evaluate(make_inputs(21.5)).action is Action.IDLE
+
 
 class TestStickyBoost:
     """The aux latch: boost below -boost_delta, held until the call releases."""
@@ -238,17 +257,40 @@ class TestSetpointMirroring:
         assert primary_intent(decision).setpoint == 21.0
         assert cool_intent(decision).setpoint == 21.0
 
-    def test_heat_cool_mirrors_low_to_heaters_high_to_cooler(self) -> None:
+    def test_heat_cool_idle_mirrors_low_to_heaters_high_to_cooler(self) -> None:
         engine = ClimateEngine()
         decision = engine.evaluate(make_inputs(21.0))
         assert primary_intent(decision).setpoint == 19.0
         assert cool_intent(decision).setpoint == 23.0
 
-    def test_aux_heating_cool_unit_gets_the_low_setpoint(self) -> None:
+    def test_active_cool_call_mirrors_its_release_temperature(self) -> None:
+        # Setpoint = high would let the device's own thermostat cut out at
+        # the top of the range before the engine's release point.
+        engine = ClimateEngine()
+        decision = engine.evaluate(make_inputs(24.0))
+        assert cool_intent(decision).setpoint == 22.5
+        # Back inside the range but still latched: keep driving to release.
+        decision = engine.evaluate(make_inputs(22.8))
+        assert decision.cool_call is True
+        assert cool_intent(decision).setpoint == 22.5
+        # Released: the plain target returns as the backstop.
+        decision = engine.evaluate(make_inputs(22.5))
+        assert decision.cool_call is False
+        assert cool_intent(decision).setpoint == 23.0
+
+    def test_active_heat_call_mirrors_its_release_temperature(self) -> None:
+        engine = ClimateEngine()
+        decision = engine.evaluate(make_inputs(18.5))
+        assert primary_intent(decision).setpoint == 19.5
+        decision = engine.evaluate(make_inputs(19.5))
+        assert decision.heat_call is False
+        assert primary_intent(decision).setpoint == 19.0
+
+    def test_aux_heating_cool_unit_gets_the_heat_release_setpoint(self) -> None:
         engine = ClimateEngine()
         decision = engine.evaluate(make_inputs(15.0))
         assert cool_intent(decision).direction is Direction.HEAT
-        assert cool_intent(decision).setpoint == 19.0
+        assert cool_intent(decision).setpoint == 19.5
 
 
 class TestUnusableInputs:

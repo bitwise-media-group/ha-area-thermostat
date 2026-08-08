@@ -26,6 +26,12 @@ Hysteresis model (ported from the area_climate_control blueprint):
   the moment the temperature drops below ``low`` and cool the moment it rises
   above ``high`` (this is what makes HomeKit's Heater Cooler threshold
   semantics literal); each releases ``idle_delta`` back inside the range.
+  ``idle_delta`` is clamped to half the current gap per evaluation, so the
+  release points can at worst meet at the range midpoint and never cross —
+  a large ``idle_delta`` therefore means "drive to the midpoint". While a
+  call is active its release temperature (not the range edge) is mirrored to
+  the device, so the device's internal thermostat cannot cut out at the edge
+  before the area sensor reaches the release point.
 """
 
 from __future__ import annotations
@@ -106,8 +112,10 @@ class EngineInputs:
 class SourceIntent:
     """What a role's source should be doing right now.
 
-    ``setpoint`` is mirrored to the device so it self-limits at the target —
-    the safety backstop if this engine ever stops being consulted. ``None``
+    ``setpoint`` is mirrored to the device so it self-limits — the safety
+    backstop if this engine ever stops being consulted. Idle sources get the
+    plain target; an active call in HEAT_COOL gets its release temperature
+    instead, so the device keeps running until the engine releases. ``None``
     means leave the device setpoint alone (OFF mode).
     """
 
@@ -222,7 +230,9 @@ class ClimateEngine:
             heat_call=self._heat_call,
             cool_call=self._cool_call,
             aux_heat_call=self._aux_heat_call,
-            intents=self._build_intents(inputs, setpoints=self._setpoints(inputs)),
+            intents=self._build_intents(
+                inputs, setpoints=self._setpoints(inputs, thresholds)
+            ),
             valid=True,
         )
 
@@ -232,11 +242,14 @@ class ClimateEngine:
             low, high = inputs.target_low, inputs.target_high
             if low is None or high is None:
                 return None
+            # Clamp to half the gap: the release points at worst meet at the
+            # midpoint, never cross, however narrow the range is dragged.
+            idle = min(cfg.idle_delta, max((high - low) / 2, 0.0))
             return _Thresholds(
                 heat_on=low,
-                heat_off=low + cfg.idle_delta,
+                heat_off=low + idle,
                 cool_on=high,
-                cool_off=high - cfg.idle_delta,
+                cool_off=high - idle,
                 boost_on=low - cfg.boost_delta,
             )
         target = inputs.target
@@ -297,10 +310,22 @@ class ClimateEngine:
             return Action.COOLING
         return Action.IDLE
 
-    def _setpoints(self, inputs: EngineInputs) -> tuple[float | None, float | None]:
-        """(heat_setpoint, cool_setpoint) to mirror to the devices."""
+    def _setpoints(
+        self, inputs: EngineInputs, th: _Thresholds
+    ) -> tuple[float | None, float | None]:
+        """(heat_setpoint, cool_setpoint) to mirror to the devices.
+
+        In HEAT_COOL an active call mirrors its release temperature rather
+        than the range edge: with the edge as setpoint the device's own
+        thermostat cuts out at the edge before the engine's release point and
+        the area bounces along that edge. Idle sources fall back to the plain
+        targets as the self-limiting backstop. Single-target modes are safe
+        as-is — there the target sits beyond the release point.
+        """
         if inputs.mode is Mode.HEAT_COOL:
-            return inputs.target_low, inputs.target_high
+            heat_setpoint = th.heat_off if self._heat_call else inputs.target_low
+            cool_setpoint = th.cool_off if self._cool_call else inputs.target_high
+            return heat_setpoint, cool_setpoint
         return inputs.target, inputs.target
 
     def _build_intents(
