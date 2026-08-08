@@ -1,0 +1,39 @@
+# Copyright 2026 BitWise Media Group Ltd
+# SPDX-License-Identifier: MIT
+
+# Dependabot auto-merge — thin caller for the org's reusable workflow. When a
+# Dependabot PR's CI finishes green this approves it if it is a minor or patch
+# update, then squash-merges it once every check on its head is green (squash,
+# not fast-forward, so queued Dependabot PRs merge without a rebase — and a CI
+# rerun — between each one). Major updates are never approved, so they wait
+# for a human.
+#
+# Prerequisites (one-time, org-wide — see bitwise-media-group/ff-merge):
+#   - org variable FF_MERGE_CLIENT_ID and org secret FF_MERGE_PRIVATE_KEY
+#   - the "FF Merge" App installed on this repo and in the ruleset bypass list
+#
+# Pinned to a full commit SHA (tag in the comment); Dependabot keeps it fresh.
+
+name: Dependabot Auto-Merge
+
+# Just workflow_run — this event does not attach a check run to the PR, so it
+# leaves no skipped-job clutter (and needs no pull_request_target). `workflows:`
+# lists every workflow that must pass plus "Merge Review Ack": an approval only
+# fires pull_request_review, so its ack run completing is what re-enters the
+# merge for a human-approved Dependabot PR (e.g. a major update).
+on:
+  workflow_run:
+    workflows:
+      ["Continuous Integration", "Validate", "Security Analysis", "Merge Review Ack"]
+    types: [completed]
+
+# the App token does the privileged work; the caller grants nothing
+permissions: {}
+
+jobs:
+  auto-merge:
+    uses: bitwise-media-group/github-workflows/.github/workflows/dependabot-merge.yaml@677e862cc088fe8f7b8948189467fe77e60e93a9 # v6.0.2
+    with:
+      app-client-id: ${{ vars.FF_MERGE_CLIENT_ID }}
+    secrets:
+      app-private-key: ${{ secrets.FF_MERGE_PRIVATE_KEY }}
