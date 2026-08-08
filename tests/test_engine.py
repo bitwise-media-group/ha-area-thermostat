@@ -103,16 +103,39 @@ class TestSingleTargetBands:
 
 
 class TestHeatCoolRange:
-    """HEAT_COOL: [low, high] is the dead band; idle_delta on release."""
+    """HEAT_COOL: [low, high] is the dead band; release at the midpoint by
+    default, or idle_delta inside the range when set explicitly."""
 
-    def test_heat_engages_below_low(self) -> None:
+    def test_heat_engages_below_low_and_releases_at_midpoint(self) -> None:
         engine = ClimateEngine()
         assert engine.evaluate(make_inputs(18.9)).action is Action.HEATING
         assert engine.evaluate(make_inputs(19.2)).action is Action.HEATING  # sticky
-        assert engine.evaluate(make_inputs(19.5)).action is Action.IDLE
+        assert engine.evaluate(make_inputs(20.9)).action is Action.HEATING  # sticky
+        assert engine.evaluate(make_inputs(21.0)).action is Action.IDLE
 
-    def test_cool_engages_above_high(self) -> None:
+    def test_cool_engages_above_high_and_releases_at_midpoint(self) -> None:
         engine = ClimateEngine()
+        assert engine.evaluate(make_inputs(23.1)).action is Action.COOLING
+        assert engine.evaluate(make_inputs(22.8)).action is Action.COOLING  # sticky
+        assert engine.evaluate(make_inputs(21.1)).action is Action.COOLING  # sticky
+        assert engine.evaluate(make_inputs(21.0)).action is Action.IDLE
+
+    def test_default_release_tracks_the_range(self) -> None:
+        # No stored number to go stale: widen the range and the release
+        # point moves with the new midpoint.
+        engine = ClimateEngine()
+        assert engine.evaluate(make_inputs(26.5, low=18.0, high=26.0)).action is (
+            Action.COOLING
+        )
+        assert engine.evaluate(make_inputs(22.1, low=18.0, high=26.0)).action is (
+            Action.COOLING
+        )
+        assert engine.evaluate(make_inputs(22.0, low=18.0, high=26.0)).action is (
+            Action.IDLE
+        )
+
+    def test_explicit_idle_delta_keeps_a_narrow_release(self) -> None:
+        engine = ClimateEngine(EngineConfig(idle_delta=0.5))
         assert engine.evaluate(make_inputs(23.1)).action is Action.COOLING
         assert engine.evaluate(make_inputs(22.8)).action is Action.COOLING  # sticky
         assert engine.evaluate(make_inputs(22.5)).action is Action.IDLE
@@ -129,7 +152,7 @@ class TestHeatCoolRange:
         assert decision.action is Action.COOLING
         assert decision.heat_call is False
 
-    def test_large_idle_delta_releases_at_the_midpoint(self) -> None:
+    def test_oversized_idle_delta_is_clamped_to_the_midpoint(self) -> None:
         # idle_delta 5 with a 4° range (19-23) clamps to 2: both releases
         # land exactly on the midpoint (21) and never cross.
         engine = ClimateEngine(EngineConfig(act_delta=6.0, idle_delta=5.0))
@@ -162,8 +185,8 @@ class TestStickyBoost:
         assert decision.aux_heat_call is True
         decision = engine.evaluate(make_inputs(19.2))
         assert decision.aux_heat_call is True  # heat call still latched
-        # Released only when the heat call itself releases.
-        decision = engine.evaluate(make_inputs(19.5))
+        # Released only when the heat call itself releases (the midpoint).
+        decision = engine.evaluate(make_inputs(21.0))
         assert decision.aux_heat_call is False
         assert cool_intent(decision).active is False
 
@@ -203,7 +226,7 @@ class TestFallback:
         decision = engine.evaluate(make_inputs(18.5, primary_available=True))
         assert decision.aux_heat_call is True
         assert primary_intent(decision).active is True
-        decision = engine.evaluate(make_inputs(19.5, primary_available=True))
+        decision = engine.evaluate(make_inputs(21.0, primary_available=True))
         assert decision.aux_heat_call is False
 
 
@@ -265,24 +288,30 @@ class TestSetpointMirroring:
 
     def test_active_cool_call_mirrors_its_release_temperature(self) -> None:
         # Setpoint = high would let the device's own thermostat cut out at
-        # the top of the range before the engine's release point.
+        # the top of the range before the engine's release point (the
+        # midpoint by default).
         engine = ClimateEngine()
         decision = engine.evaluate(make_inputs(24.0))
-        assert cool_intent(decision).setpoint == 22.5
+        assert cool_intent(decision).setpoint == 21.0
         # Back inside the range but still latched: keep driving to release.
         decision = engine.evaluate(make_inputs(22.8))
         assert decision.cool_call is True
-        assert cool_intent(decision).setpoint == 22.5
+        assert cool_intent(decision).setpoint == 21.0
         # Released: the plain target returns as the backstop.
-        decision = engine.evaluate(make_inputs(22.5))
+        decision = engine.evaluate(make_inputs(21.0))
         assert decision.cool_call is False
         assert cool_intent(decision).setpoint == 23.0
+
+    def test_explicit_idle_delta_shifts_the_mirrored_release(self) -> None:
+        engine = ClimateEngine(EngineConfig(idle_delta=0.5))
+        decision = engine.evaluate(make_inputs(24.0))
+        assert cool_intent(decision).setpoint == 22.5
 
     def test_active_heat_call_mirrors_its_release_temperature(self) -> None:
         engine = ClimateEngine()
         decision = engine.evaluate(make_inputs(18.5))
-        assert primary_intent(decision).setpoint == 19.5
-        decision = engine.evaluate(make_inputs(19.5))
+        assert primary_intent(decision).setpoint == 21.0
+        decision = engine.evaluate(make_inputs(21.0))
         assert decision.heat_call is False
         assert primary_intent(decision).setpoint == 19.0
 
@@ -290,7 +319,7 @@ class TestSetpointMirroring:
         engine = ClimateEngine()
         decision = engine.evaluate(make_inputs(15.0))
         assert cool_intent(decision).direction is Direction.HEAT
-        assert cool_intent(decision).setpoint == 19.5
+        assert cool_intent(decision).setpoint == 21.0
 
 
 class TestUnusableInputs:

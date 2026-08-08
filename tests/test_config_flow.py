@@ -163,3 +163,40 @@ async def test_options_flow_validation_and_save(hass: HomeAssistant) -> None:
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert entry.options[CONF_ACT_DELTA] == 2.5
     assert entry.options[CONF_IDLE_DELTA] == 2.0
+
+
+async def test_options_flow_empty_hysteresis_means_auto(hass: HomeAssistant) -> None:
+    entry = make_entry(options={CONF_IDLE_DELTA: 0.5})
+    entry.add_to_hass(hass)
+    with patch(
+        "custom_components.area_thermostat.async_setup_entry", return_value=True
+    ):
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+
+        # Clearing the optional field drops the key entirely: back to auto
+        # (midpoint release), with the act check against the 0.5 fallback.
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], dict(DEFAULT_OPTIONS)
+        )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert CONF_IDLE_DELTA not in entry.options
+
+
+async def test_options_flow_auto_hysteresis_still_bounds_act(
+    hass: HomeAssistant,
+) -> None:
+    entry = make_entry()
+    entry.add_to_hass(hass)
+    with patch(
+        "custom_components.area_thermostat.async_setup_entry", return_value=True
+    ):
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+
+        # No explicit hysteresis: the single-target fallback (0.5) must
+        # still sit below the act threshold.
+        bad = {**DEFAULT_OPTIONS, CONF_ACT_DELTA: 0.4}
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], bad
+        )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "idle_not_below_act"}

@@ -34,6 +34,9 @@ DEFAULT_ACTIVE_PRESET = "home"
 DEFAULT_IDLE_PRESET = "standby"
 
 DEFAULT_ACT_DELTA = 1.5
+# The single-target release band assumed when the optional release
+# hysteresis is left empty (auto). In heat_cool, auto releases at the
+# low/high midpoint instead — see the engine.
 DEFAULT_IDLE_DELTA = 0.5
 DEFAULT_BOOST_DELTA = 3.0
 DEFAULT_MIN_TEMP = 7.0
@@ -43,9 +46,10 @@ DEFAULT_KEEP_ALIVE = 300
 DEFAULT_MIN_COMMAND_INTERVAL = 10
 DEFAULT_SENSOR_STALE_TIMEOUT = 900
 
+# CONF_IDLE_DELTA is deliberately absent: unset means auto (midpoint
+# release in heat_cool, DEFAULT_IDLE_DELTA in single-target modes).
 DEFAULT_OPTIONS = {
     CONF_ACT_DELTA: DEFAULT_ACT_DELTA,
-    CONF_IDLE_DELTA: DEFAULT_IDLE_DELTA,
     CONF_BOOST_DELTA: DEFAULT_BOOST_DELTA,
     CONF_MIN_TEMP: DEFAULT_MIN_TEMP,
     CONF_MAX_TEMP: DEFAULT_MAX_TEMP,

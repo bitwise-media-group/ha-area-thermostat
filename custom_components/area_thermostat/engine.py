@@ -25,10 +25,10 @@ Hysteresis model (ported from the area_climate_control blueprint):
 - HEAT_COOL: the user's [low, high] range IS the dead band, so heat engages
   the moment the temperature drops below ``low`` and cool the moment it rises
   above ``high`` (this is what makes HomeKit's Heater Cooler threshold
-  semantics literal); each releases ``idle_delta`` back inside the range.
-  ``idle_delta`` is clamped to half the current gap per evaluation, so the
-  release points can at worst meet at the range midpoint and never cross —
-  a large ``idle_delta`` therefore means "drive to the midpoint". While a
+  semantics literal); each releases back inside the range — by default all
+  the way to the range midpoint. An explicit ``idle_delta`` overrides the
+  release distance, clamped to half the current gap per evaluation so the
+  release points can at worst meet at the midpoint and never cross. While a
   call is active its release temperature (not the range edge) is mirrored to
   the device, so the device's internal thermostat cannot cut out at the edge
   before the area sensor reaches the release point.
@@ -85,12 +85,23 @@ class Direction(StrEnum):
     COOL = "cool"
 
 
+# Release band for single-target modes when idle_delta is unset — the
+# blueprint's 0.5 °C.
+_SINGLE_TARGET_IDLE_DEFAULT = 0.5
+
+
 @dataclass(frozen=True, slots=True)
 class EngineConfig:
-    """Tuning knobs; defaults reproduce the blueprint's bands."""
+    """Tuning knobs; defaults reproduce the blueprint's bands.
+
+    ``idle_delta`` of ``None`` (the default) means auto: release at the
+    low/high midpoint in HEAT_COOL, and 0.5 °C from the target in the
+    single-target modes. An explicit value fixes the release distance
+    (clamped to half the current gap in HEAT_COOL).
+    """
 
     act_delta: float = 1.5
-    idle_delta: float = 0.5
+    idle_delta: float | None = None
     boost_delta: float = 3.0
 
 
@@ -242,9 +253,11 @@ class ClimateEngine:
             low, high = inputs.target_low, inputs.target_high
             if low is None or high is None:
                 return None
-            # Clamp to half the gap: the release points at worst meet at the
-            # midpoint, never cross, however narrow the range is dragged.
-            idle = min(cfg.idle_delta, max((high - low) / 2, 0.0))
+            # Auto (None) releases at the midpoint; an explicit value is
+            # clamped to half the gap so the release points at worst meet at
+            # the midpoint, never cross, however narrow the range is dragged.
+            half_gap = max((high - low) / 2, 0.0)
+            idle = half_gap if cfg.idle_delta is None else min(cfg.idle_delta, half_gap)
             return _Thresholds(
                 heat_on=low,
                 heat_off=low + idle,
@@ -255,11 +268,12 @@ class ClimateEngine:
         target = inputs.target
         if target is None:
             return None
+        idle = _SINGLE_TARGET_IDLE_DEFAULT if cfg.idle_delta is None else cfg.idle_delta
         return _Thresholds(
             heat_on=target - cfg.act_delta,
-            heat_off=target - cfg.idle_delta,
+            heat_off=target - idle,
             cool_on=target + cfg.act_delta,
-            cool_off=target + cfg.idle_delta,
+            cool_off=target + idle,
             boost_on=target - cfg.boost_delta,
         )
 

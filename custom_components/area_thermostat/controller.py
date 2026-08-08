@@ -116,10 +116,11 @@ class AreaThermostatController:
                 min_interval,
             )
 
+        idle_delta = self.options.get(CONF_IDLE_DELTA)
         self.engine = ClimateEngine(
             EngineConfig(
                 act_delta=float(self.options[CONF_ACT_DELTA]),
-                idle_delta=float(self.options[CONF_IDLE_DELTA]),
+                idle_delta=None if idle_delta is None else float(idle_delta),
                 boost_delta=float(self.options[CONF_BOOST_DELTA]),
             )
         )

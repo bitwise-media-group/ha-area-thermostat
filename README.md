@@ -21,9 +21,9 @@ entity.
 - **Modes.** `heat_cool` runs full arbitration; `heat` never cools; `cool` never heats (no boost, no fallback); `off`
   idles everything (aircon off, heating to its idle preset).
 - **Thresholds.** In `heat_cool` the `[low, high]` range is the dead band: heat engages below `low`, cooling above
-  `high`, and each releases the configured hysteresis (default 0.5 °C) back inside the range. The hysteresis is clamped
-  to half the current gap, so a large value drives the temperature to the midpoint of the range. In single-target modes
-  the blueprint's bands apply: engage 1.5 °C beyond the target, release within 0.5 °C.
+  `high`, and each releases back inside the range — by default all the way to the range midpoint, tracking the range as
+  it changes. An explicit release hysteresis overrides that, clamped to half the current gap. In single-target modes the
+  blueprint's bands apply: engage 1.5 °C beyond the target, release within the hysteresis (default 0.5 °C).
 - **Boost.** More than 3 °C below the heat threshold, the aircon joins in `heat` mode. The boost is deliberately sticky:
   it runs until the heat call itself releases, so it cannot chatter around the boost threshold.
 - **Fallback.** If the area has no primary heat entity, or its entity is `unavailable`/`unknown`, the aircon takes over

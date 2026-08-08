@@ -45,6 +45,7 @@ from .const import (
     CONF_TEMP_SENSOR,
     CONF_TEMP_STEP,
     DEFAULT_ACTIVE_PRESET,
+    DEFAULT_IDLE_DELTA,
     DEFAULT_IDLE_PRESET,
     DEFAULT_OPTIONS,
     DOMAIN,
@@ -88,8 +89,21 @@ _STRATEGY_SCHEMA = vol.Schema(
 
 
 def _options_schema(options: dict[str, Any]) -> vol.Schema:
-    def _number(key: str, minimum: float, maximum: float, step: float, unit: str):
-        return vol.Required(key, default=options[key]), NumberSelector(
+    fields: dict[Any, Any] = {}
+    # required=False fields may be left empty; their key is then absent from
+    # the saved options (CONF_IDLE_DELTA: empty means auto release).
+    for key, minimum, maximum, step, unit, required in (
+        (CONF_ACT_DELTA, 0.1, 5.0, 0.1, "°C", True),
+        (CONF_IDLE_DELTA, 0.1, 5.0, 0.1, "°C", False),
+        (CONF_BOOST_DELTA, 0.5, 10.0, 0.1, "°C", True),
+        (CONF_MIN_TEMP, 5.0, 25.0, 0.5, "°C", True),
+        (CONF_MAX_TEMP, 15.0, 35.0, 0.5, "°C", True),
+        (CONF_TEMP_STEP, 0.1, 1.0, 0.1, "°C", True),
+        (CONF_KEEP_ALIVE, 0, 3600, 30, "s", True),
+        (CONF_MIN_COMMAND_INTERVAL, 0, 120, 1, "s", True),
+        (CONF_SENSOR_STALE_TIMEOUT, 0, 7200, 60, "s", True),
+    ):
+        selector = NumberSelector(
             NumberSelectorConfig(
                 min=minimum,
                 max=maximum,
@@ -98,21 +112,12 @@ def _options_schema(options: dict[str, Any]) -> vol.Schema:
                 unit_of_measurement=unit,
             )
         )
-
-    fields: dict[Any, Any] = {}
-    for args in (
-        (CONF_ACT_DELTA, 0.1, 5.0, 0.1, "°C"),
-        (CONF_IDLE_DELTA, 0.1, 5.0, 0.1, "°C"),
-        (CONF_BOOST_DELTA, 0.5, 10.0, 0.1, "°C"),
-        (CONF_MIN_TEMP, 5.0, 25.0, 0.5, "°C"),
-        (CONF_MAX_TEMP, 15.0, 35.0, 0.5, "°C"),
-        (CONF_TEMP_STEP, 0.1, 1.0, 0.1, "°C"),
-        (CONF_KEEP_ALIVE, 0, 3600, 30, "s"),
-        (CONF_MIN_COMMAND_INTERVAL, 0, 120, 1, "s"),
-        (CONF_SENSOR_STALE_TIMEOUT, 0, 7200, 60, "s"),
-    ):
-        key, selector = _number(*args)
-        fields[key] = selector
+        marker = (
+            vol.Required(key, default=options[key])
+            if required
+            else vol.Optional(key, description={"suggested_value": options.get(key)})
+        )
+        fields[marker] = selector
     return vol.Schema(fields)
 
 
@@ -240,7 +245,11 @@ class AreaThermostatOptionsFlow(OptionsFlow):
     ) -> ConfigFlowResult:
         errors: dict[str, str] = {}
         if user_input is not None:
-            if user_input[CONF_IDLE_DELTA] >= user_input[CONF_ACT_DELTA]:
+            # An empty release hysteresis means auto: midpoint release in
+            # heat_cool, DEFAULT_IDLE_DELTA in single-target modes — the
+            # latter is what the act threshold must stay above.
+            idle = user_input.get(CONF_IDLE_DELTA, DEFAULT_IDLE_DELTA)
+            if idle >= user_input[CONF_ACT_DELTA]:
                 errors["base"] = "idle_not_below_act"
             elif user_input[CONF_MIN_TEMP] >= user_input[CONF_MAX_TEMP] - MIN_RANGE_GAP:
                 errors["base"] = "min_not_below_max"
