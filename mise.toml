@@ -1,0 +1,15 @@
+# Copyright 2026 BitWise Media Group Ltd
+# SPDX-License-Identifier: MIT
+#
+# area-thermostat consumes the shared toolchain (bitwise-media-group/toolchain)
+# as the .mise/ submodule: pinned tools and the markdown-lib archetype (prose
+# lint, license headers, shell/container lint) come from there, and the
+# Makefile is a thin forwarder (.mise/mise.mk). The Python-specific toolset
+# runs through uv (pinned in the toolchain) — ruff and pytest are dev
+# dependencies in pyproject.toml, so `uv run` provides them from uv.lock and
+# no repo-local [tools] additions are needed. The canonical fmt/lint/test
+# tasks live in tasks.toml, included after the archetype so its same-named
+# aggregates replace the archetype's.
+
+[task_config]
+includes = [".mise/tasks/markdown-lib.toml", "tasks.toml"]
