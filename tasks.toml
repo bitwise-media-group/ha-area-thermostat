@@ -1,0 +1,66 @@
+# Copyright 2026 BitWise Media Group Ltd
+# SPDX-License-Identifier: MIT
+#
+# Repo-local tasks. Included after the markdown-lib archetype (see mise.toml),
+# so the fmt/lint/ci/pr aggregates here replace the archetype's and weave the
+# Python steps in with the universal prose/license/shell passes.
+#
+# All Python tooling flows through the toolchain-pinned uv: ruff and pytest
+# are dev-group dependencies resolved from uv.lock, so the exact linter and
+# test-harness versions are locked next to the homeassistant test framework
+# they must match.
+#
+# Included task files use the simplified format: top-level keys ARE task names.
+
+[fmt-python]
+hide = true
+description = "format Python with ruff"
+dir = "{{config_root}}"
+run = "uv run ruff format custom_components tests"
+
+[lint-python]
+hide = true
+description = "lint Python with ruff check + ruff format --check"
+dir = "{{config_root}}"
+run = [
+  "uv run ruff check custom_components tests",
+  "uv run ruff format --check custom_components tests",
+]
+
+[fmt]
+description = "format Python, prose; inject license headers"
+run = [{ task = "fmt-python" }, { task = "fmt-prose" }, { task = "license" }]
+
+[lint]
+description = "Python lint (ruff) + prose/shell/container/license checks"
+run = [
+  { task = "license-check" },
+  { task = "lint-containers" },
+  { task = "lint-shell" },
+  { task = "lint-prose" },
+  { task = "lint-python" },
+]
+
+[test]
+description = "run the pytest suite (coverage into coverage/ for the CI upload)"
+dir = "{{config_root}}"
+run = """
+uv run pytest \
+  --cov=custom_components/area_thermostat \
+  --cov-report=term-missing \
+  --cov-report=xml:coverage/cobertura-coverage.xml \
+  --junitxml=coverage/junit.xml
+"""
+
+[ci]
+description = "the gates the reusable CI workflow runs"
+run = [{ task = "lint" }, { task = "test" }]
+
+[pr]
+description = "full local gate before a pull request"
+run = [
+  { task = "fmt" },
+  { task = "lint" },
+  { task = "test" },
+  { task = "commit" },
+]
