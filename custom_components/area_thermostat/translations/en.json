@@ -1,0 +1,94 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Area entities",
+        "description": "One thermostat per area: pick the room's temperature sensor and the real climate devices it arbitrates.",
+        "data": {
+          "name": "Name",
+          "temperature_sensor": "Temperature sensor",
+          "cool_entity": "Air conditioning",
+          "cool_can_heat": "Air conditioning can heat (boost / fallback)",
+          "heat_entity": "Primary heating (optional)"
+        },
+        "data_description": {
+          "temperature_sensor": "The sensor that represents the room temperature; the thermostat regulates against this, not the devices' internal sensors.",
+          "cool_entity": "Climate entity providing cooling — and heat boost/fallback if it can heat.",
+          "heat_entity": "Climate entity providing primary heat (e.g. underfloor heating). Leave empty for cooling-only areas."
+        }
+      },
+      "heat_strategy": {
+        "title": "Primary heating commands",
+        "description": "How the primary heat source is told to heat or stand down.",
+        "data": {
+          "heat_strategy": "Command strategy",
+          "heat_active_preset": "Active preset (call for heat)",
+          "heat_idle_preset": "Idle preset (stand down)"
+        },
+        "data_description": {
+          "heat_strategy": "Preset: drive preset modes (Heatmiser Neo home/standby). HVAC mode: drive heat/off directly.",
+          "heat_active_preset": "Only used with the preset strategy.",
+          "heat_idle_preset": "Only used with the preset strategy."
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure area",
+        "description": "Swap the entities this area thermostat arbitrates.",
+        "data": {
+          "temperature_sensor": "Temperature sensor",
+          "cool_entity": "Air conditioning",
+          "cool_can_heat": "Air conditioning can heat (boost / fallback)",
+          "heat_entity": "Primary heating (optional)",
+          "heat_strategy": "Command strategy",
+          "heat_active_preset": "Active preset (call for heat)",
+          "heat_idle_preset": "Idle preset (stand down)"
+        }
+      }
+    },
+    "error": {
+      "same_entity": "The heating and cooling entities must be different."
+    },
+    "abort": {
+      "already_configured": "An area thermostat for this sensor and air conditioner already exists.",
+      "reconfigure_successful": "Area thermostat reconfigured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tuning",
+        "data": {
+          "act_delta": "Act threshold (single-target modes)",
+          "idle_delta": "Release hysteresis",
+          "boost_delta": "Boost threshold",
+          "min_temp": "Minimum setpoint",
+          "max_temp": "Maximum setpoint",
+          "temp_step": "Setpoint step",
+          "keep_alive": "Keep-alive interval (0 disables)",
+          "min_command_interval": "Minimum interval between device commands",
+          "sensor_stale_timeout": "Sensor stale fail-safe timeout (0 disables)"
+        },
+        "data_description": {
+          "act_delta": "In heat or cool mode, engage when the temperature is this far beyond the target. In heat/cool (auto) mode the low/high range itself is the dead band.",
+          "idle_delta": "Release a heating/cooling call once the temperature is back within this distance of the threshold.",
+          "boost_delta": "Bring the air conditioning in as boost heat when the temperature is this far below the heat threshold; the boost then runs until the call releases.",
+          "keep_alive": "Forced re-assert of modes, presets, and setpoints on every interval — undoes manual fiddling at the device.",
+          "sensor_stale_timeout": "If the temperature sensor stays unavailable this long, all sources are idled for safety."
+        }
+      }
+    },
+    "error": {
+      "idle_not_below_act": "The release hysteresis must be smaller than the act threshold.",
+      "idle_too_large": "The release hysteresis must be at most half the minimum low/high gap (1 °C).",
+      "min_not_below_max": "The minimum setpoint must be at least 1 °C below the maximum."
+    }
+  },
+  "selector": {
+    "heat_strategy": {
+      "options": {
+        "preset": "Preset modes (e.g. Heatmiser Neo home/standby)",
+        "hvac_mode": "HVAC mode (heat/off)"
+      }
+    }
+  }
+}
