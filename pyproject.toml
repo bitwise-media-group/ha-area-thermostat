@@ -1,0 +1,53 @@
+# Copyright 2026 BitWise Media Group Ltd
+# SPDX-License-Identifier: MIT
+#
+# Not an installable package — the deliverable is custom_components/
+# area_thermostat, deployed by HACS as source files. pyproject.toml exists for
+# uv (dev dependencies + lockfile; its presence is also what makes the
+# reusable CI set up uv) and for the ruff/pytest configuration.
+
+[project]
+name = "area-thermostat"
+version = "0.1.0" # x-release-please-version
+description = "Home Assistant integration: one thermostat per area arbitrating underfloor heating and air conditioning"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+
+[dependency-groups]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "pytest-cov",
+  "pytest-homeassistant-custom-component",
+  "ruff",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+  "B",   # bugbear
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "I",   # isort
+  "PL",  # pylint
+  "RUF", # ruff-specific
+  "SIM", # simplify
+  "UP",  # pyupgrade
+  "W",   # pycodestyle warnings
+]
+ignore = [
+  "E501",    # line length is ruff format's job
+  "PLR0913", # keyword-only state/config carriers legitimately take many args
+  "PLR2004", # threshold comparisons against literals are the point of the engine
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"

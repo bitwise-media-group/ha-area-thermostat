@@ -1,0 +1,12 @@
+{
+  "domain": "area_thermostat",
+  "name": "Area Thermostat",
+  "codeowners": ["@bitwise-media-group"],
+  "config_flow": true,
+  "documentation": "https://github.com/bitwise-media-group/area-thermostat",
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/bitwise-media-group/area-thermostat/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
