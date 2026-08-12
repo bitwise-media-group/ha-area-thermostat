@@ -12,7 +12,13 @@ version = "0.1.0" # x-release-please-version
 description = "Home Assistant integration: one thermostat per area arbitrating underfloor heating and air conditioning"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.13"
+# Dev-lock resolution floor only (package = false, nothing is published): a
+# lower floor makes uv keep parallel lock forks for old interpreters, pinning
+# EOL homeassistant releases whose transitive deps carry known CVEs. 3.14.2 is
+# the floor of the current pytest-homeassistant-custom-component line; the
+# toolchain pins Python 3.14.6. Runtime compat for users is governed by Home
+# Assistant itself, not this field.
+requires-python = ">=3.14.2"
 
 [dependency-groups]
 dev = [
