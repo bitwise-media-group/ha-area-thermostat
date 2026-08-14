@@ -7,7 +7,7 @@
 # (hacs.json, topics, releases). The scheduled run catches new upstream rules
 # between pushes.
 #
-# Pinned to full commit SHAs (branch in the comment); Dependabot keeps them
+# Pinned to full commit SHAs (branch in the comment); Renovate keeps them
 # fresh.
 
 name: Validate

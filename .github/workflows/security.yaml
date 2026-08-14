@@ -6,7 +6,7 @@
 # the matrix explicitly: `actions` for the workflow callers and `python` for
 # the integration source, both analysed build-free.
 #
-# Pinned to a full commit SHA (tag in the comment); Dependabot keeps it fresh.
+# Pinned to a full commit SHA (tag in the comment); Renovate keeps it fresh.
 
 name: Security Analysis
 

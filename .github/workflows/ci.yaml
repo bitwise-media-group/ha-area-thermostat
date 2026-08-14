@@ -9,7 +9,7 @@
 # pyproject.toml at the root makes the reusable workflow set up uv, which
 # provisions the pinned Python toolchain and the locked dev dependencies.
 #
-# Pinned to a full commit SHA (tag in the comment); Dependabot keeps it fresh.
+# Pinned to a full commit SHA (tag in the comment); Renovate keeps it fresh.
 
 name: Continuous Integration
 

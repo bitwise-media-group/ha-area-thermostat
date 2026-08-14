@@ -7,9 +7,9 @@
 # event. This workflow completes on an approving review purely so its
 # workflow_run(completed) fires in the base-repo context, where the merge
 # callers retry the merge. Harmless for same-repo PRs. Its name is listed in
-# the `workflow_run.workflows` of merge.yaml and dependabot-merge.yaml.
+# the `workflow_run.workflows` of merge.yaml.
 #
-# Pinned to a full commit SHA (tag in the comment); Dependabot keeps it fresh.
+# Pinned to a full commit SHA (tag in the comment); Renovate keeps it fresh.
 
 name: Merge Review Ack
 
