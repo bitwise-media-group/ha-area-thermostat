@@ -1027,23 +1027,23 @@ wheels = [
 
 [[package]]
 name = "grpcio"
-version = "1.83.0"
+version = "1.83.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0c/98/304898ac4e04e2d5e4e4c2eadc178b1f2a16d5f4bc2f91306c87d64680b9/grpcio-1.83.0.tar.gz", hash = "sha256:7674587248fbbb2ac6e4eecf83a8a0f3d91a928f941de571acfd3a2f007fbc24", size = 13428824, upload-time = "2026-07-23T15:20:37.759Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e2/b1/46539f5050d7c316a13396d185451f95084a74ddc68b12d818595bef0377/grpcio-1.83.1.tar.gz", hash = "sha256:9cee6fcbf2eb57c4b49451787bfa87be8efc1ca02a0b327dd4b54d44502e362b", size = 13445033, upload-time = "2026-08-28T07:09:11.464Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/60/f2cca8147ea213d3e43ae9158d03ad04e020fdf32ff027253e1fe93f921d/grpcio-1.83.0-cp314-cp314-linux_armv7l.whl", hash = "sha256:3f351629f6ae16ecc0ec3553e586a6763ffd9f6114044286d0cbec3e09241bfa", size = 6305607, upload-time = "2026-07-23T15:20:15.353Z" },
-    { url = "https://files.pythonhosted.org/packages/d0/ab/d3874931d123a95e83a3ebf8aa04537988fb62425cedb8bf3cefc5ad41b2/grpcio-1.83.0-cp314-cp314-macosx_11_0_universal2.whl", hash = "sha256:d05ff664100d429335b93c91b8b34ddf9e94a112205e7fa06dede309e44a4e4c", size = 12166617, upload-time = "2026-07-23T15:20:17.435Z" },
-    { url = "https://files.pythonhosted.org/packages/92/ff/6f18f9426b69306f4e00a9add3b0ee2748da8aad53836ef80cab0d62d04f/grpcio-1.83.0-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:7936f2a56cf04f6514705c0fedf400971de01b6aa1719327e4718f410a765e2b", size = 6880213, upload-time = "2026-07-23T15:20:19.98Z" },
-    { url = "https://files.pythonhosted.org/packages/70/21/706d1147c6b93b98f179240c13991fbcc56880eba0c868abb1ad40d8a0a6/grpcio-1.83.0-cp314-cp314-manylinux2014_i686.manylinux_2_17_i686.whl", hash = "sha256:b0a0be840e51b6b7ee9df9269770faf77bdf4b771053c257c21d12bad607714c", size = 7618335, upload-time = "2026-07-23T15:20:22.161Z" },
-    { url = "https://files.pythonhosted.org/packages/74/04/1a8443c889115ec9e213a213e86bc93a71ee9088027e5befa09aaa0edd9d/grpcio-1.83.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:009667eaf3dcd5224c713589cdc98e7ca4ed0ff0b61132c6b276e930eb83a2df", size = 7043416, upload-time = "2026-07-23T15:20:24.209Z" },
-    { url = "https://files.pythonhosted.org/packages/86/c6/94e0fee5b12bc1da1370185b680988db6f739d19b42d9959db01a7ea50bf/grpcio-1.83.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:bb669918fd88936b15599caff4160a77ab74bdeb25f2231f6e45b61282d6107b", size = 7583253, upload-time = "2026-07-23T15:20:26.313Z" },
-    { url = "https://files.pythonhosted.org/packages/a0/97/de1ccb671fb85575bc5192faedf9ecdbdf5b390d2e6584dcf552bcbd370e/grpcio-1.83.0-cp314-cp314-musllinux_1_2_i686.whl", hash = "sha256:c19b454d3d3f28db81f2c7c4dbaee96e7f6fd149721733ffe79d6bc530f17404", size = 8605102, upload-time = "2026-07-23T15:20:28.437Z" },
-    { url = "https://files.pythonhosted.org/packages/17/0f/0e0ec749a7034ffcbaa050e39779872950ead90c22e7e0116be3f28b2b46/grpcio-1.83.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:61007cd08640abc5c54547ee32505474c482cd733a53cb87551ea81faa6350af", size = 7979826, upload-time = "2026-07-23T15:20:31.182Z" },
-    { url = "https://files.pythonhosted.org/packages/83/fa/c3fda157287f64bc65acee6c5aa90c41acf9e0d3a8e69a265eecff6d00a1/grpcio-1.83.0-cp314-cp314-win32.whl", hash = "sha256:32e11c37f5285b0c6fa3042c05fe06903696689749833fc64e67dec71b9bbe33", size = 4471765, upload-time = "2026-07-23T15:20:33.195Z" },
-    { url = "https://files.pythonhosted.org/packages/a1/00/b1b26431c9d54eee11724fd6e5585473a2ed47fbc1fb95e5204906a642ce/grpcio-1.83.0-cp314-cp314-win_amd64.whl", hash = "sha256:2bb48cb5e6dd005ca12b89ce4b6ac0b48ff3112c747542ee7986ef611a8ca6d9", size = 5298932, upload-time = "2026-07-23T15:20:35.48Z" },
+    { url = "https://files.pythonhosted.org/packages/42/9c/484d981d8b90c4e6abf3030bd2ed747e84d1eb192b3ec9cbb41e0b73e4bf/grpcio-1.83.1-cp314-cp314-linux_armv7l.whl", hash = "sha256:8b3c87ca908296bf125f841d3e1a2225a2b39aaa8ed7a57e7ccde465ee519bab", size = 6306089, upload-time = "2026-08-28T07:08:48.379Z" },
+    { url = "https://files.pythonhosted.org/packages/84/01/0afec1c92e4f292f74a44ecf75eabbf40903125b8c4df103c9868d6338da/grpcio-1.83.1-cp314-cp314-macosx_11_0_universal2.whl", hash = "sha256:c0f3f20c90e72a171917ae65706500b096a1c3eb5f162c3ce702a2e25635f132", size = 12170381, upload-time = "2026-08-28T07:08:50.653Z" },
+    { url = "https://files.pythonhosted.org/packages/c7/5a/e9a2383804433a0a61d6d93777ad321c7f36ac1cfdaa4c6d1a7c9ac846b7/grpcio-1.83.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:81bbf35a46bf8cad2dfbb2eccc19c711befb58b288acb534bbcd0d74283202a6", size = 6883286, upload-time = "2026-08-28T07:08:53.654Z" },
+    { url = "https://files.pythonhosted.org/packages/63/e7/f8ca8f76994e14c70b9a0052e82f10de497a23db450c36379c9716ebfc4d/grpcio-1.83.1-cp314-cp314-manylinux2014_i686.manylinux_2_17_i686.whl", hash = "sha256:215cec07d11176507387bda4bf2751816e880f9bff8dc1ca524bfbb8ed8f2fad", size = 7624293, upload-time = "2026-08-28T07:08:55.709Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/7a/4b672814b0cd0fe63bdd735379d88b165759f3144ab023ad8ec5fc4d53ac/grpcio-1.83.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:abce7d43ec29cd39230fa8339de1a07643b55adc412a454850fbd875349950ff", size = 7044346, upload-time = "2026-08-28T07:08:57.802Z" },
+    { url = "https://files.pythonhosted.org/packages/50/b8/d89fe60e4239ad51be333dd9cc703741d449a35064e51f8a0b5bfa755432/grpcio-1.83.1-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:e256f95a40e3b0183a98556fb7164d24b97eeb353123ccabfcba94712b35ee2a", size = 7584187, upload-time = "2026-08-28T07:08:59.867Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/b2/b290d7402633d9166e4dd47e6f5f74a24ce10a8340b84455896ebc349f85/grpcio-1.83.1-cp314-cp314-musllinux_1_2_i686.whl", hash = "sha256:2110059146fb0ea216e1ffddb29377b5cc2fd412a5b0a92e102616bd5edf18c2", size = 8608730, upload-time = "2026-08-28T07:09:02.592Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/44/fa89e44d1b5cf5b9fa71b2fd7abf506f182fd43917231a92fbf1ea326b02/grpcio-1.83.1-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:20d944d967843f8183f9f23d5916388362e5f8eeeae855bbe4354d906dc9f31b", size = 7983283, upload-time = "2026-08-28T07:09:05.087Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/b8/9db73ed1f35ffa76124ac574bf296d06a359798dfd6b50d382f2b8a060a1/grpcio-1.83.1-cp314-cp314-win32.whl", hash = "sha256:623c87c6d4a1cb30d82c4e896f95477050f2e01b4a1f8cf91ff2b1abdf89c457", size = 4474327, upload-time = "2026-08-28T07:09:07.179Z" },
+    { url = "https://files.pythonhosted.org/packages/65/22/fc9a622d885a7a37ff972a12faaef443d74e47407181da70d0ab62ab41f0/grpcio-1.83.1-cp314-cp314-win_amd64.whl", hash = "sha256:47e6934ad38779271e2e7cc5f78a63a407cf3d98114c65c1fdbcd3f5a716f29b", size = 5302032, upload-time = "2026-08-28T07:09:09.285Z" },
 ]
 
 [[package]]
@@ -1094,7 +1094,7 @@ wheels = [
 
 [[package]]
 name = "hass-nabucasa"
-version = "2.6.0"
+version = "2.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "acme" },
@@ -1115,9 +1115,9 @@ dependencies = [
     { name = "webrtc-models" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/de/15/9a704f662bc5aed70076a87413a77af6a292d38eb3d9eafea1469a893381/hass_nabucasa-2.6.0.tar.gz", hash = "sha256:1926261ee23bc2737f27e3c0c8b54f602a45ee9e5a621485422db3fc4eb4978b", size = 132740, upload-time = "2026-08-26T09:54:42.655Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9a/a4/e38702be5091a6a6a8bbffcb193e91ad86a3a47382c611ad42f743f32a5f/hass_nabucasa-2.7.0.tar.gz", hash = "sha256:fb741a2b6447250e5fc6ff07c09184e3afaf8b1d0028833e58b6a652b26965e3", size = 133280, upload-time = "2026-08-27T13:19:56.631Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/dd/8c04e9bf7af2932ee6b85a156f6199f7399a0df72e19a9a1a2eb534b62e7/hass_nabucasa-2.6.0-py3-none-any.whl", hash = "sha256:447c7098db2d0d27b27e4bde8a527fac6e6e3bf0143991ea25ada0a162e53a05", size = 97715, upload-time = "2026-08-26T09:54:41.068Z" },
+    { url = "https://files.pythonhosted.org/packages/5d/04/810a2557a51f4c9563fdf07ab77ab6d5d2a61c3bcc0c12ff0aa4388b8f0b/hass_nabucasa-2.7.0-py3-none-any.whl", hash = "sha256:a07f0dba540e53204363c1ad762967c715ca7bcebc175fa2a50a4d8721c7ce43", size = 98072, upload-time = "2026-08-27T13:19:55.189Z" },
 ]
 
 [[package]]
@@ -1134,7 +1134,7 @@ wheels = [
 
 [[package]]
 name = "homeassistant"
-version = "2026.9.0b0"
+version = "2026.9.0b1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiodns" },
@@ -1186,9 +1186,9 @@ dependencies = [
     { name = "yarl" },
     { name = "zeroconf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f3/14/162975770689cbb06309fd0e9f3cc94aca4e97f1126ea6a301660d32018d/homeassistant-2026.9.0b0.tar.gz", hash = "sha256:e5ba787513d8abb6ca23228ba2a5c5b6c7409ae1b12d1962df9a7eb1dfbde445", size = 37371399, upload-time = "2026-08-26T19:28:28.144Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/95/d4/0585ecb2b06cd10790c912b21c8f596bb4a48f77fb5b42f2ac12e5f1e9a1/homeassistant-2026.9.0b1.tar.gz", hash = "sha256:6108f37a0b411381ee2fbbf14d68ac3d4da1d76859f946375fdbe5cb1139e5f1", size = 37400908, upload-time = "2026-08-27T16:46:28.541Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b0/a6/06ac015b8d53bb76210d15e0b33420780c5b3175ee70fa17126d90316608/homeassistant-2026.9.0b0-py3-none-any.whl", hash = "sha256:e788297900fbf1f16e5cf494a1391467b67b1abf8b5c439753f84996e07cd96d", size = 60926131, upload-time = "2026-08-26T19:28:23.221Z" },
+    { url = "https://files.pythonhosted.org/packages/0d/1e/78f721c40895326afa6b839e57198370365dba2693c15da9a056bb145375/homeassistant-2026.9.0b1-py3-none-any.whl", hash = "sha256:89f4996d608854cf46392793dadec858ccef26964a82e01faf18576c2acd13e6", size = 60948300, upload-time = "2026-08-27T16:46:21.749Z" },
 ]
 
 [[package]]
@@ -1608,11 +1608,11 @@ wheels = [
 
 [[package]]
 name = "probatio"
-version = "0.11.2"
+version = "0.11.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/df/1e/7ab3a71eef5bf44b4b2456c854916d3838a93ffb545d41f4e46445bc8d00/probatio-0.11.2.tar.gz", hash = "sha256:d19bcd2b8611f876252dabc111bee99525474d3c585b05379b5741d41a086789", size = 351125, upload-time = "2026-08-24T17:40:17.548Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/11/3e/490592aebc7bf4834b6ffc647fdc973126ec46c8ce5909927250124cef41/probatio-0.11.3.tar.gz", hash = "sha256:d2cda4ef4b27fce939a046514afa9dec12e1b4730aa67115d7b60c27f59b8f6b", size = 368230, upload-time = "2026-08-27T15:36:13.781Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8d/a9/4c3b897ddf8716129a82628c9d8bfa8fec5c1356ffbc17f34f78d41639de/probatio-0.11.2-py3-none-any.whl", hash = "sha256:06c283cf7455de9dc27f752aa593b25126a257c4b28d4dbf53efe286eaf8fbd0", size = 215206, upload-time = "2026-08-24T17:40:15.204Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/f3/efe9ed9a347f86c4384281ef82dcb79b51b0296dad3dc6c51480d107efac/probatio-0.11.3-py3-none-any.whl", hash = "sha256:45c4609d936a2d2a28ed5356b0ef1e3a1dedf0021fb07452288c30bd1bc761d3", size = 221971, upload-time = "2026-08-27T15:36:11.237Z" },
 ]
 
 [[package]]
@@ -2050,7 +2050,7 @@ wheels = [
 
 [[package]]
 name = "pytest-homeassistant-custom-component"
-version = "0.13.358"
+version = "0.13.359"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohasupervisor" },
@@ -2083,9 +2083,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "unidiff" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5a/39/e4bbc733719f45628360a608090bd517f8a7637367f11156a3d4ef1fd750/pytest_homeassistant_custom_component-0.13.358.tar.gz", hash = "sha256:5143a05cac7a29afd70ce72740d0a88c5c433ff602a24231af049123f8f6a11c", size = 78514, upload-time = "2026-08-27T16:06:45.938Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/be/7e/392d0a74ad2040e699160f94e7e0656e608eac9bc7edf84a3bf7242a4e36/pytest_homeassistant_custom_component-0.13.359.tar.gz", hash = "sha256:4bf5f7a18bcf59748efd752a98972c55822e8ba701b84ed285ae23c09a8aba54", size = 78575, upload-time = "2026-08-28T17:06:22.122Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/a6/4daa1943d70557edf1c2a39d8d9e1a8b0708c6e61a22bf198f3e286c16ef/pytest_homeassistant_custom_component-0.13.358-py3-none-any.whl", hash = "sha256:a53d2eb10b78c241416d3848c08cdae72e8b792f78301436436448970c917f2e", size = 84458, upload-time = "2026-08-27T16:06:44.576Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/e4/e6c74d4d67eafae6b7ff11a5eb16d00e0d3e47296a2a9e04824bc43b612a/pytest_homeassistant_custom_component-0.13.359-py3-none-any.whl", hash = "sha256:12608662bf4f73aaf57f3af0df18c2529b18963ed9475e7426e593cf19962562", size = 84458, upload-time = "2026-08-28T17:06:20.565Z" },
 ]
 
 [[package]]
