@@ -8,7 +8,7 @@
 
 [project]
 name = "area-thermostat"
-version = "0.1.0" # x-release-please-version
+version = "0.2.0" # x-release-please-version
 description = "Home Assistant integration: one thermostat per area arbitrating underfloor heating and air conditioning"
 readme = "README.md"
 license = "MIT"
