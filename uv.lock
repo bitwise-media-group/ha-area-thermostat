@@ -164,11 +164,11 @@ wheels = [
 
 [[package]]
 name = "aiooui"
-version = "0.1.9"
+version = "0.1.11"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/14/b7/ad0f86010bbabc4e556e98dd2921a923677188223cc524432695966f14fa/aiooui-0.1.9.tar.gz", hash = "sha256:e8c8bc59ab352419e0747628b4cce7c4e04d492574c1971e223401126389c5d8", size = 369276, upload-time = "2025-01-19T00:12:44.853Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/e4/9ac5dc50921ebaffb625c55d4a057d337cca95fe2de3257649fea946e5e1/aiooui-0.1.11.tar.gz", hash = "sha256:737e1c605339a4ca3a860f0c60f1a35af0e256b44c93e8d0487ad62f3addeda8", size = 346204, upload-time = "2026-09-25T18:36:03.773Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7c/fa/b1310457adbea7adb84d2c144159f3b41341c40c80df3c10ce6b266874b3/aiooui-0.1.9-py3-none-any.whl", hash = "sha256:737a5e62d8726540218c2b70e5f966d9912121e4644f3d490daf8f3c18b182e5", size = 367404, upload-time = "2025-01-19T00:12:42.57Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/a8/5dd74c2dad63e66ea9b0caf67abaa6ce2ae84207346141b3952e6c703290/aiooui-0.1.11-py3-none-any.whl", hash = "sha256:531e808bba926d80213413202243754a125a100b3e7912dadb3cd3f921e1665d", size = 343372, upload-time = "2026-09-25T18:36:01.841Z" },
 ]
 
 [[package]]
