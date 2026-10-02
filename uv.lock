@@ -893,9 +893,9 @@ wheels = [
 
 [[package]]
 name = "dbus-fast"
-version = "5.0.25"
+version = "5.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5b/99/898122941a032252282c6e52b9f34027fd542caa789b256328769d321918/dbus_fast-5.0.25.tar.gz", hash = "sha256:6491daa9edacbd28770ff84522ff9a335591a74d1da12ba06b395d1bde077f6a", size = 85753, upload-time = "2026-10-01T16:08:50.203Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ec/2d/2bc799ccc55ca2a92a3e3d9a93690caab29db6b4c06f398c01055e628dd5/dbus_fast-5.1.0.tar.gz", hash = "sha256:c5dc62931f00572017da29445346933801ae910875197e1df31369b6b03f6636", size = 85766, upload-time = "2026-10-02T12:59:26.01Z" }
 
 [[package]]
 name = "envs"
