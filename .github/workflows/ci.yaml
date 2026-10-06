@@ -3,11 +3,12 @@
 
 # Continuous integration — thin caller for the org's reusable ci workflow. It
 # discovers the canonical tasks this repo defines (`mise tasks ls --name-only`)
-# and runs `mise run <task>` for each: lint (ruff check + format --check plus
-# the toolchain's prose/shell/container/license passes) and test (pytest with
-# pytest-homeassistant-custom-component, coverage into coverage/). The
-# pyproject.toml at the root makes the reusable workflow set up uv, which
-# provisions the pinned Python toolchain and the locked dev dependencies.
+# and runs `mise run <task>` for each, from the toolchain's python archetype:
+# lint (ruff check + format --check plus the prose/shell/container/license/
+# workflow passes), test (pytest with pytest-homeassistant-custom-component,
+# coverage into coverage/) and build (a no-op: nothing is packaged). mise
+# installs the toolchain-pinned uv, which provisions Python from
+# requires-python and the locked dev dependencies from uv.lock.
 #
 # Pinned to a full commit SHA (tag in the comment); Renovate keeps it fresh.
 
@@ -28,5 +29,6 @@ jobs:
     uses: bitwise-media-group/github-workflows/.github/workflows/ci.yaml@fea4c5284a9d3679c64f0e2cac5810124e0294d2 # v7.0.0
     with:
       # flip to true once the repo is registered on Codecov — the test task
-      # already emits coverage/cobertura-coverage.xml and coverage/junit.xml
+      # emits coverage/junit.xml, but its Cobertura report is coverage/coverage.xml,
+      # not the coverage/cobertura-coverage.xml this workflow uploads
       coverage: false

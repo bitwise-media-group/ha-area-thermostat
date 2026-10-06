@@ -67,12 +67,12 @@ In the HomeKit Bridge accessory settings, expose the area thermostat and pick th
 
 ## Development
 
-Everything runs through [mise](https://mise.jdx.dev) tasks backed by the shared toolchain submodule
-(`git submodule update --init` after cloning):
+Everything runs through [mise](https://mise.jdx.dev) tasks from the shared toolchain submodule's python archetype
+(`git submodule update --init`, then `mise install`, after cloning); `make <task>` forwards to `mise run <task>`:
 
 ```sh
-make fmt   # ruff format + prose format + license headers
-make lint  # ruff + prose/shell/container/license checks
+make fmt   # license headers + ruff format/fix + prose format
+make lint  # ruff + prose/shell/container/license/workflow checks
 make test  # pytest (engine unit tests + HA integration tests via uv)
 make pr    # the full local gate
 ```
